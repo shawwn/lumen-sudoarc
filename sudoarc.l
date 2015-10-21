@@ -198,6 +198,8 @@
 (def rem (f xs)
   (keep (complement (testify f)) xs))
 
+(def rev reverse)
+
 ; Useful benchmark?
 
 ; (let lines (split (read-file "test.l") "\n")
