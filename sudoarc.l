@@ -126,7 +126,7 @@
           `(if ,name ,a (iflet ,name ,@bs)))))))
 
 (mac whenlet (name rest: l)
-  (let-when name ,@l))
+  `(let-when ,name ,@l))
 
 (mac aif l
   `(iflet it ,@l))
