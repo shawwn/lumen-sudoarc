@@ -122,8 +122,11 @@
   (when (some? l)
     (let ((x a rest: bs) l)
       `(let ,name ,x
-        ,(if (one? l) name
+        ,(if (one? l) ,name
           `(if ,name ,a (iflet ,name ,@bs)))))))
+
+(mac whenlet (name a rest: bs)
+  `(iflet ,name ,a (do ,@bs)))
 
 (mac aif l
   `(iflet it ,@l))
