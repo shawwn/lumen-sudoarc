@@ -185,13 +185,18 @@
   (w/uniq g
     `(fn ,g (not (apply ,f ,g)))))
 
+(def testify (x)
+  (if (function? x) x
+    [= _ x]))
+
 (def keep (f xs)
+  (set f (testify f))
   (acc (step x xs
     (when (f x)
       (a x)))))
 
 (def rem (f xs)
-  (keep (complement f) xs))
+  (keep (complement (testify f)) xs))
 
 ; Useful benchmark?
 
