@@ -1571,8 +1571,7 @@ function appusage()
   return(prn(""))
 end
 function script63(name)
-  endswith(name, ".l")
-  return(endswith(name, ".arc"))
+  return(endswith(name, ".l") or endswith(name, ".arc"))
 end
 function appmain(argv)
   if none63(argv or {}) then
@@ -1588,6 +1587,7 @@ function appmain(argv)
     return(load(op))
   end
   if op == "repl" then
+    map(load, params)
     return
   end
   local _x1 = argv
@@ -1595,14 +1595,10 @@ function appmain(argv)
   local _i = 0
   while _i < _n do
     local arg = _x1[_i + 1]
-    if dir63(arg) then
-      monkitree(arg)
+    if script63(arg) then
+      load(arg)
     else
-      if script63(arg) then
-        load(arg)
-      else
-        error("unknown cmd " .. arg)
-      end
+      error("unknown cmd " .. arg)
     end
     _i = _i + 1
   end

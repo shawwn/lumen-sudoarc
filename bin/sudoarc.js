@@ -1658,8 +1658,7 @@ appusage = function () {
   return(prn(""));
 };
 script63 = function (name) {
-  endswith(name, ".l");
-  return(endswith(name, ".arc"));
+  return(endswith(name, ".l") || endswith(name, ".arc"));
 };
 appmain = function (argv) {
   if (none63(argv || [])) {
@@ -1675,6 +1674,7 @@ appmain = function (argv) {
     return(load(op));
   }
   if (op === "repl") {
+    map(load, params);
     return;
   }
   var _x1 = argv;
@@ -1682,14 +1682,10 @@ appmain = function (argv) {
   var _i = 0;
   while (_i < _n) {
     var arg = _x1[_i];
-    if (dir63(arg)) {
-      monkitree(arg);
+    if (script63(arg)) {
+      load(arg);
     } else {
-      if (script63(arg)) {
-        load(arg);
-      } else {
-        throw new Error("unknown cmd " + arg);
-      }
+      throw new Error("unknown cmd " + arg);
     }
     _i = _i + 1;
   }
