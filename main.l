@@ -5,8 +5,8 @@
   (prn ""))
 
 (def script? (name)
-  (endswith name ".l")
-  (endswith name ".arc"))
+  (or (endswith name ".l")
+      (endswith name ".arc")))
 
 (def appmain (argv)
   (when (none? (or argv ()))
@@ -20,13 +20,13 @@
     ; run a lumen script.
     (when (script? op)
       (return (load op)))
-    ; repl.
+    ; run any lumen scripts, then get a repl.
     (when (= op "repl")
+      (map load params)
       (return))) ; lumen's (main) will start a repl.
   ; eval files.
   (step arg argv
-    (if (dir? arg) (monkitree arg)
-        (script? arg) (load arg)
+    (if (script? arg) (load arg)
         (error (cat "unknown cmd " arg)))))
 (appmain (args))
 
