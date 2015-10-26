@@ -257,6 +257,25 @@ case $host in
 |(define delimiters (set-of "(" ")" ";" "\n"))|
 |(define delimiters (set-of "(" ")"  "[" "]"  "{" "}" ";" "\n"))|)
 
-(rebuild 3)
-(test)
+;
+; Expose some useful fns globally.
+;
+
+(define mkglobal (file rest: variables)
+  (each (x variables)
+    (patch file
+      (cat "(define " x " ")
+      (cat "(define-global " x " "))))
+
+(make-global "reader.l" repl eval-print)
+
+
+; Apply all of these changes by rebuilding Lumen several times.  The
+; first rebuild will be using the old Lumen compiler. The second will
+; be running with any changes we made to the compiler. The third
+; should produce identical output.  Finally, run all test suites.
+; (See test.l)
+
+(rebuild 3) ; `make -B; make -B; make -B`
+(test)      ; `make test`
 
