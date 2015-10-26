@@ -43,6 +43,9 @@ end
 function function63(x)
   return(type(x) == "function")
 end
+function obj63(x)
+  return(is63(x) and type(x) == "table")
+end
 function atom63(x)
   return(nil63(x) or string63(x) or number63(x) or boolean63(x))
 end
@@ -453,52 +456,56 @@ function escape(s)
   end
   return(s1 .. "\"")
 end
-function string(x, depth)
-  if depth and depth > 40 then
-    return("circular")
+function string(x, depth, ancestors)
+  if nil63(x) then
+    return("nil")
   else
-    if nil63(x) then
-      return("nil")
+    if nan63(x) then
+      return("nan")
     else
-      if nan63(x) then
-        return("nan")
+      if x == inf then
+        return("inf")
       else
-        if x == inf then
-          return("inf")
+        if x == -inf then
+          return("-inf")
         else
-          if x == -inf then
-            return("-inf")
-          else
-            if boolean63(x) then
-              if x then
-                return("true")
-              else
-                return("false")
-              end
+          if boolean63(x) then
+            if x then
+              return("true")
             else
-              if string63(x) then
-                return(escape(x))
+              return("false")
+            end
+          else
+            if string63(x) then
+              return(escape(x))
+            else
+              if atom63(x) then
+                return(tostring(x))
               else
-                if atom63(x) then
-                  return(tostring(x))
+                if function63(x) then
+                  return("fn")
                 else
-                  if function63(x) then
-                    return("function")
+                  if not obj63(x) then
+                    return("|" .. type(x) .. "|")
                   else
                     local s = "("
                     local sp = ""
                     local xs = {}
                     local ks = {}
                     local d = (depth or 0) + 1
+                    local ans = join({x}, ancestors or {})
+                    if in63(x, ancestors or {}) then
+                      return("circular")
+                    end
                     local _o10 = x
                     local k = nil
                     for k in next, _o10 do
                       local v = _o10[k]
                       if number63(k) then
-                        xs[k] = string(v, d)
+                        xs[k] = string(v, d, ans)
                       else
                         add(ks, k .. ":")
-                        add(ks, string(v, d))
+                        add(ks, string(v, d, ans))
                       end
                     end
                     local _o11 = join(xs, ks)
@@ -531,8 +538,8 @@ function toplevel63()
   return(one63(environment))
 end
 function setenv(k, ...)
-  local _r65 = unstash({...})
-  local _id1 = _r65
+  local _r66 = unstash({...})
+  local _id1 = _r66
   local _keys = cut(_id1, 0)
   if string63(k) then
     local _e7

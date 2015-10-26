@@ -39,6 +39,9 @@ boolean63 = function (x) {
 function63 = function (x) {
   return(type(x) === "function");
 };
+obj63 = function (x) {
+  return(is63(x) && type(x) === "object");
+};
 atom63 = function (x) {
   return(nil63(x) || string63(x) || number63(x) || boolean63(x));
 };
@@ -528,43 +531,47 @@ escape = function (s) {
   }
   return(s1 + "\"");
 };
-string = function (x, depth) {
-  if (depth && depth > 40) {
-    return("circular");
+string = function (x, depth, ancestors) {
+  if (nil63(x)) {
+    return("nil");
   } else {
-    if (nil63(x)) {
-      return("nil");
+    if (nan63(x)) {
+      return("nan");
     } else {
-      if (nan63(x)) {
-        return("nan");
+      if (x === inf) {
+        return("inf");
       } else {
-        if (x === inf) {
-          return("inf");
+        if (x === -inf) {
+          return("-inf");
         } else {
-          if (x === -inf) {
-            return("-inf");
-          } else {
-            if (boolean63(x)) {
-              if (x) {
-                return("true");
-              } else {
-                return("false");
-              }
+          if (boolean63(x)) {
+            if (x) {
+              return("true");
             } else {
-              if (string63(x)) {
-                return(escape(x));
+              return("false");
+            }
+          } else {
+            if (string63(x)) {
+              return(escape(x));
+            } else {
+              if (atom63(x)) {
+                return(tostring(x));
               } else {
-                if (atom63(x)) {
-                  return(tostring(x));
+                if (function63(x)) {
+                  return("fn");
                 } else {
-                  if (function63(x)) {
-                    return("function");
+                  if (! obj63(x)) {
+                    return("|" + type(x) + "|");
                   } else {
                     var s = "(";
                     var sp = "";
                     var xs = [];
                     var ks = [];
                     var d = (depth || 0) + 1;
+                    var ans = join([x], ancestors || []);
+                    if (in63(x, ancestors || [])) {
+                      return("circular");
+                    }
                     var _o10 = x;
                     var k = undefined;
                     for (k in _o10) {
@@ -577,10 +584,10 @@ string = function (x, depth) {
                       }
                       var _k8 = _e16;
                       if (number63(_k8)) {
-                        xs[_k8] = string(v, d);
+                        xs[_k8] = string(v, d, ans);
                       } else {
                         add(ks, _k8 + ":");
-                        add(ks, string(v, d));
+                        add(ks, string(v, d, ans));
                       }
                     }
                     var _o11 = join(xs, ks);
@@ -619,8 +626,8 @@ toplevel63 = function () {
   return(one63(environment));
 };
 setenv = function (k) {
-  var _r68 = unstash(Array.prototype.slice.call(arguments, 1));
-  var _id1 = _r68;
+  var _r69 = unstash(Array.prototype.slice.call(arguments, 1));
+  var _id1 = _r69;
   var _keys = cut(_id1, 0);
   if (string63(k)) {
     var _e18;
