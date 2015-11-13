@@ -538,7 +538,11 @@ local function id(id)
     id1 = id1 .. c1
     i = i + 1
   end
-  return(id1)
+  if reserved63(id1) then
+    return("_" .. id1)
+  else
+    return(id1)
+  end
 end
 local function compile_atom(x)
   if x == "nil" and target == "lua" then
@@ -798,22 +802,22 @@ end
 local function lower_if(args, hoist, stmt63, tail63)
   local _id16 = args
   local cond = _id16[1]
-  local _then = _id16[2]
-  local _else = _id16[3]
+  local then = _id16[2]
+  local else = _id16[3]
   if stmt63 or tail63 then
     local _e24
-    if _else then
-      _e24 = {lower_body({_else}, tail63)}
+    if else then
+      _e24 = {lower_body({else}, tail63)}
     end
-    return(add(hoist, join({"%if", lower(cond, hoist), lower_body({_then}, tail63)}, _e24)))
+    return(add(hoist, join({"%if", lower(cond, hoist), lower_body({then}, tail63)}, _e24)))
   else
     local e = unique("e")
     add(hoist, {"%local", e})
     local _e23
-    if _else then
-      _e23 = {lower({"set", e, _else})}
+    if else then
+      _e23 = {lower({"set", e, else})}
     end
-    add(hoist, join({"%if", lower(cond, hoist), lower({"set", e, _then})}, _e23))
+    add(hoist, join({"%if", lower(cond, hoist), lower({"set", e, then})}, _e23))
     return(e)
   end
 end
@@ -1097,6 +1101,9 @@ setenv("return", {_stash = true, special = function (x)
 end, stmt = true})
 setenv("new", {_stash = true, special = function (x)
   return("new " .. compile(x))
+end})
+setenv("typeof", {_stash = true, special = function (x)
+  return("typeof(" .. compile(x) .. ")")
 end})
 setenv("error", {_stash = true, special = function (x)
   local _e28
