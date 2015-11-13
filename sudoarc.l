@@ -1,8 +1,4 @@
 
-; TODO: Is this necessary?
-(define-macro define l
-  `(define-global ,@l))
-
 ; Useful shorthand for seeing what a Lumen expression compiles to.  It
 ; can be used anywhere eval is used, and it shows you what code eval
 ; would have run.  E.g. try:
