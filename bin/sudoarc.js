@@ -1211,8 +1211,8 @@ prnerr = function (_x) {
 loadstr = function (str) {
   var _r3 = unstash(Array.prototype.slice.call(arguments, 1));
   var _id1 = _r3;
-  var on_err = _id1["on-err"];
   var verbose = _id1.verbose;
+  var on_err = _id1["on-err"];
   var _x1 = readstr(str);
   var _n = _35(_x1);
   var _i = 0;
@@ -1243,12 +1243,12 @@ loadstr = function (str) {
 load = function (file) {
   var _r5 = unstash(Array.prototype.slice.call(arguments, 1));
   var _id3 = _r5;
-  var on_err = _id3["on-err"];
   var verbose = _id3.verbose;
+  var on_err = _id3["on-err"];
   if (verbose) {
     print("Loading " + file);
   }
-  return(loadstr(read_file(file), {_stash: true, "on-err": on_err, verbose: verbose}));
+  return(loadstr(read_file(file), {_stash: true, verbose: verbose, "on-err": on_err}));
 };
 setenv("mac", {_stash: true, macro: function () {
   var l = unstash(Array.prototype.slice.call(arguments, 0));
@@ -1476,11 +1476,11 @@ keep = function (f, xs) {
   a = function (item) {
     return(add(_g1, item));
   };
-  var _x92 = xs;
-  var _n3 = _35(_x92);
+  var _x76 = xs;
+  var _n3 = _35(_x76);
   var _i3 = 0;
   while (_i3 < _n3) {
-    var x = _x92[_i3];
+    var x = _x76[_i3];
     if (f(x)) {
       a(x);
     }
@@ -1551,11 +1551,11 @@ pr = function () {
   var l = cut(_id27, 0);
   var c = undefined;
   if (sep) {
-    var _x94 = l;
-    var _n4 = _35(_x94);
+    var _x78 = l;
+    var _n4 = _35(_x78);
     var _i4 = 0;
     while (_i4 < _n4) {
-      var x = _x94[_i4];
+      var x = _x78[_i4];
       if (c) {
         write(c);
       } else {
@@ -1565,11 +1565,11 @@ pr = function () {
       _i4 = _i4 + 1;
     }
   } else {
-    var _x95 = l;
-    var _n5 = _35(_x95);
+    var _x79 = l;
+    var _n5 = _35(_x79);
     var _i5 = 0;
     while (_i5 < _n5) {
-      var x = _x95[_i5];
+      var x = _x79[_i5];
       write(str(x));
       _i5 = _i5 + 1;
     }
@@ -1643,7 +1643,7 @@ shell = function (cmd) {
   var childproc = require("child_process");
   var exec = childproc.execSync;
   var o = exec(cmd);
-  return(o.toString());
+  return(o["toString"]());
 };
 exit = function (code) {
   return(process.exit(code));
@@ -1658,7 +1658,7 @@ script63 = function (name) {
 };
 appmain = function (argv) {
   if (none63(argv || [])) {
-    return(repl());
+    return;
   }
   var op = argv[0];
   var params = cut(argv, 1);
