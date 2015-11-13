@@ -1089,9 +1089,9 @@ repl = function () {
     }
   };
   system.write("> ");
-  var in = process.stdin;
-  in.setEncoding("utf8");
-  return(in.on("data", rep1));
+  var _in = process.stdin;
+  _in.setEncoding("utf8");
+  return(_in.on("data", rep1));
 };
 compile_file = function (path) {
   var s = reader.stream(system["read-file"](path));

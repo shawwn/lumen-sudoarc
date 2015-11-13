@@ -174,6 +174,10 @@ read_table["("] = function (s)
   end
   return(r)
 end
+read_table[" . "] = function (s)
+  read_char(s, 3)
+  return("rest:")
+end
 read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)
 end

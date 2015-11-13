@@ -174,6 +174,10 @@ read_table["("] = function (s) {
   }
   return(r);
 };
+read_table[" . "] = function (s) {
+  read_char(s, 3);
+  return("rest:");
+};
 read_table[")"] = function (s) {
   throw new Error("Unexpected ) at " + s.pos);
 };
