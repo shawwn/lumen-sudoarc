@@ -191,16 +191,10 @@ case $host in
 
 (patch "reader.l"
 |
-(define-reader (")" s)
-  (error (cat "Unexpected ) at " (get s 'pos))))
-
 (define-reader ("\"" s)
   (read-char s)
 |
 |
-(define-reader (")" s)
-  (error (cat "Unexpected ) at " (get s 'pos))))
-
 (define-reader ("\"\"\"" s)
   (read-char s 3)
   (with r nil
