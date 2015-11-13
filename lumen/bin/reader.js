@@ -130,11 +130,15 @@ read_table[""] = function (s) {
             if (str === "-inf") {
               return(-inf);
             } else {
-              var n = number(str);
-              if (nil63(n) || nan63(n) || inf63(n)) {
-                return(str);
+              if (str === ".") {
+                return("rest:");
               } else {
-                return(n);
+                var n = number(str);
+                if (nil63(n) || nan63(n) || inf63(n)) {
+                  return(str);
+                } else {
+                  return(n);
+                }
               }
             }
           }
@@ -173,10 +177,6 @@ read_table["("] = function (s) {
     }
   }
   return(r);
-};
-read_table[" . "] = function (s) {
-  read_char(s, 3);
-  return("rest:");
 };
 read_table[")"] = function (s) {
   throw new Error("Unexpected ) at " + s.pos);

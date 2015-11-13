@@ -130,11 +130,15 @@ read_table[""] = function (s)
             if str == "-inf" then
               return(-inf)
             else
-              local n = number(str)
-              if nil63(n) or nan63(n) or inf63(n) then
-                return(str)
+              if str == "." then
+                return("rest:")
               else
-                return(n)
+                local n = number(str)
+                if nil63(n) or nan63(n) or inf63(n) then
+                  return(str)
+                else
+                  return(n)
+                end
               end
             end
           end
@@ -173,10 +177,6 @@ read_table["("] = function (s)
     end
   end
   return(r)
-end
-read_table[" . "] = function (s)
-  read_char(s, 3)
-  return("rest:")
 end
 read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)

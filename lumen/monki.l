@@ -24,16 +24,6 @@
       (= n 95)))               ; _
 |)
 
-; ; reader.l: turn "." atoms into "rest:" atoms.
-; ; This enables (fn (x . ys) ...) rather than (fn (x rest: ys) ...)
-; (patch "reader.l"
-; |
-;         (= str "-inf") -inf
-; |
-; |
-;         (= str "-inf") -inf
-;         (= str ".")    "rest:"
-; |)
 
 ; runtime.l: def obj? (x)
 (patch "runtime.l"
@@ -157,6 +147,17 @@ case $host in
 """)
 
 
+; reader.l: turn "." atoms into "rest:" atoms.
+; This enables (fn (x . ys) ...) rather than (fn (x rest: ys) ...)
+(patch "reader.l"
+|
+        (= str "-inf") -inf
+|
+|
+        (= str "-inf") -inf
+        (= str ".")    "rest:"
+|)
+
 
 ;
 ; reader.l: Add """raw string""" syntax.
@@ -215,21 +216,6 @@ case $host in
   (when (= (peek-char s 3) "\"\"\"")
     (return ((get read-table "\"\"\"") s)))
   (read-char s)
-|)
-
-
-; reader.l: turn "." atoms into "rest:" atoms.
-; This enables (fn (x . ys) ...) rather than (fn (x rest: ys) ...)
-(patch "reader.l"
-|
-(define-reader (")" s)
-|
-|
-(define-reader (" . " s)
-  (read-char s 3)
-  "rest:")
-
-(define-reader (")" s)
 |)
 
 

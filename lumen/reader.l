@@ -86,6 +86,7 @@
         (= str "-nan") nan
         (= str "inf") inf
         (= str "-inf") -inf
+        (= str ".")    "rest:"
       (let n (number str)
         (if (or (nil? n) (nan? n) (inf? n)) str n)))))
 
@@ -105,10 +106,6 @@
                     (set (get l k) v))
                   (flag? x) (set (get l (clip x 1)) true)
                 (add l x)))))))))
-
-(define-reader (" . " s)
-  (read-char s 3)
-  "rest:")
 
 (define-reader (")" s)
   (error (cat "Unexpected ) at " (get s 'pos))))
