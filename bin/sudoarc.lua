@@ -1109,8 +1109,8 @@ end
 function loadstr(str, ...)
   local _r3 = unstash({...})
   local _id1 = _r3
-  local verbose = _id1.verbose
   local on_err = _id1["on-err"]
+  local verbose = _id1.verbose
   local _x2 = readstr(str)
   local _n = _35(_x2)
   local _i = 0
@@ -1149,12 +1149,12 @@ end
 function load(file, ...)
   local _r6 = unstash({...})
   local _id3 = _r6
-  local verbose = _id3.verbose
   local on_err = _id3["on-err"]
+  local verbose = _id3.verbose
   if verbose then
     print("Loading " .. file)
   end
-  return(loadstr(read_file(file), {_stash = true, verbose = verbose, ["on-err"] = on_err}))
+  return(loadstr(read_file(file), {_stash = true, ["on-err"] = on_err, verbose = verbose}))
 end
 setenv("mac", {_stash = true, macro = function (...)
   local l = unstash({...})
@@ -1368,11 +1368,11 @@ function keep(f, xs)
   a = function (item)
     return(add(_g1, item))
   end
-  local _x95 = xs
-  local _n3 = _35(_x95)
+  local _x111 = xs
+  local _n3 = _35(_x111)
   local _i3 = 0
   while _i3 < _n3 do
-    local x = _x95[_i3 + 1]
+    local x = _x111[_i3 + 1]
     if f(x) then
       a(x)
     end
@@ -1443,11 +1443,11 @@ function pr(...)
   local l = cut(_id27, 0)
   local c = nil
   if sep then
-    local _x102 = l
-    local _n4 = _35(_x102)
+    local _x118 = l
+    local _n4 = _35(_x118)
     local _i4 = 0
     while _i4 < _n4 do
-      local x = _x102[_i4 + 1]
+      local x = _x118[_i4 + 1]
       if c then
         write(c)
       else
@@ -1457,11 +1457,11 @@ function pr(...)
       _i4 = _i4 + 1
     end
   else
-    local _x103 = l
-    local _n5 = _35(_x103)
+    local _x119 = l
+    local _n5 = _35(_x119)
     local _i5 = 0
     while _i5 < _n5 do
-      local x = _x103[_i5 + 1]
+      local x = _x119[_i5 + 1]
       write(str(x))
       _i5 = _i5 + 1
     end
