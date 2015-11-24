@@ -185,9 +185,9 @@
 (yesno 2? (and (lst? it) (two? it)))
 
 (def _any? [do (be (or (nil? _) (lst? _))) (any? _)])
-(def _0? [do (be (or (nil? _) (lst? _))) (0? _)])
-(def _1? [do (be (or (nil? _) (lst? _))) (1? _)])
-(def _2? [do (be (or (nil? _) (lst? _))) (2? _)])
+(def _0?   [do (be (or (nil? _) (lst? _))) (0? _)])
+(def _1?   [do (be (or (nil? _) (lst? _))) (1? _)])
+(def _2?   [do (be (or (nil? _) (lst? _))) (2? _)])
 
 (mac complement (f)
   (w/uniq g
