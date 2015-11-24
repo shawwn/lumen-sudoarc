@@ -1,3 +1,7 @@
+
+(define-macro void l
+  `(do ,@l nil))
+
 ;; Definition funcs
 
 (define-macro alias (newname oldname)
@@ -68,9 +72,6 @@
 
 (def err (msg . l)
   (error `(,msg ,@l)))
-
-(mac void l
-  `(do ,@l nil))
 
 (mac cmp (x y)
   `(= (do ,x) (do ,y)))
