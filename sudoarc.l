@@ -159,6 +159,15 @@
      (do ,@else)))
 (alias but if1)
 
+(mac lastly (x . ys)
+  `(do1 (do ,@ys) ,x))
+
+(mac after (x . ys)
+  `(let ((ok v) (guard (do ,x)))
+     (if ok v
+       (lastly (err v)
+         ,@ys))))
+
 ; optional args.  For each (var val) in l, if var is nil, then
 ; do (set var val)
 (mac o l
