@@ -1570,20 +1570,20 @@ setenv("repeat", {_stash = true, macro = function (n, ...)
   local g = unique("g")
   return(join({"for", g, n}, l))
 end})
-setenv("push", {_stash = true, macro = function (place, val)
-  return({"add", place, val})
+setenv("push", {_stash = true, macro = function (_var, val)
+  return({"add", _var, val})
 end})
-setenv("pop", {_stash = true, macro = function (place)
+setenv("pop", {_stash = true, macro = function (_var)
   local _x375 = {"target"}
-  _x375.lua = {"table.remove", place}
-  _x375.js = {{"get", place, {"quote", "splice"}}, -1, 1}
-  return({"call", {"fn", join(), {"let", "x", {"last", place}, _x375, "x"}}})
+  _x375.lua = {"table.remove", _var}
+  _x375.js = {{"get", _var, {"quote", "splice"}}, -1, 1}
+  return({"call", {"fn", join(), {"let", "x", {"last", _var}, _x375, "x"}}})
 end})
-setenv("w/push", {_stash = true, macro = function (place, val, ...)
+setenv("w/push", {_stash = true, macro = function (_var, val, ...)
   local _r60 = unstash({...})
   local _id36 = _r60
   local body = cut(_id36, 0)
-  return(join({"do", {"push", place, val}}, body, {{"pop", place}}))
+  return(join({"do", {"push", _var, val}}, body, {{"pop", _var}}))
 end})
 setenv("lfn", {_stash = true, macro = function (name, args, body, ...)
   local _r62 = unstash({...})

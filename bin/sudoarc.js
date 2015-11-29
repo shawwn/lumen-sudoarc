@@ -1672,20 +1672,20 @@ setenv("repeat", {_stash: true, macro: function (n) {
   var g = unique("g");
   return(join(["for", g, n], l));
 }});
-setenv("push", {_stash: true, macro: function (place, val) {
-  return(["add", place, val]);
+setenv("push", {_stash: true, macro: function (_var, val) {
+  return(["add", _var, val]);
 }});
-setenv("pop", {_stash: true, macro: function (place) {
+setenv("pop", {_stash: true, macro: function (_var) {
   var _x348 = ["target"];
-  _x348.lua = ["table.remove", place];
-  _x348.js = [["get", place, ["quote", "splice"]], -1, 1];
-  return(["call", ["fn", join(), ["let", "x", ["last", place], _x348, "x"]]]);
+  _x348.lua = ["table.remove", _var];
+  _x348.js = [["get", _var, ["quote", "splice"]], -1, 1];
+  return(["call", ["fn", join(), ["let", "x", ["last", _var], _x348, "x"]]]);
 }});
-setenv("w/push", {_stash: true, macro: function (place, val) {
+setenv("w/push", {_stash: true, macro: function (_var, val) {
   var _r60 = unstash(Array.prototype.slice.call(arguments, 2));
   var _id36 = _r60;
   var body = cut(_id36, 0);
-  return(join(["do", ["push", place, val]], body, [["pop", place]]));
+  return(join(["do", ["push", _var, val]], body, [["pop", _var]]));
 }});
 setenv("lfn", {_stash: true, macro: function (name, args, body) {
   var _r62 = unstash(Array.prototype.slice.call(arguments, 3));

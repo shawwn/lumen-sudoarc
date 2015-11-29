@@ -198,21 +198,21 @@
     `(for ,g ,n
       ,@l)))
 
-(mac push (place val)
-  `(add ,place ,val))
+(mac push (var val)
+  `(add ,var ,val))
 
-(mac pop (place)
+(mac pop (var)
   `(call (fn () 
-    (let x (last ,place)
+    (let x (last ,var)
       (target
-         lua: (table.remove ,place)
-         js: ((get ,place 'splice) -1 1))
+         lua: (table.remove ,var)
+         js: ((get ,var 'splice) -1 1))
       x))))
 
-(mac w/push (place val . body)
-  `(do (push ,place ,val)
+(mac w/push (var val . body)
+  `(do (push ,var ,val)
        ,@body
-       (pop ,place)))
+       (pop ,var)))
 
 (mac lfn (name args body . l)
   `(let ,name nil
