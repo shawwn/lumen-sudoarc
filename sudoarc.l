@@ -144,11 +144,9 @@
     `(let-unique (,x) ,@body)
     `(let-unique (,@x) ,@body)))
 
-(mac ado (a . bs)
-  (w/uniq (g x)
-    `(let (,g ,a
-           it ,g)
-       ,@bs)))
+(mac ado (x . ys)
+  `(let it ,x
+     ,@ys))
 
 (mac do1 (x . ys)
   (w/uniq g
