@@ -102,9 +102,11 @@
   str [if (str? _) _ (string _)]
   lst [if (lst? _) _ (list _)])
 
+(def parts [list (vals _) (keys _)])
 (def acons [not (atom? _)])
 (def alist [and (acons _) (or (keys? _) (some? _))])
 (def empty [and (acons _) (not (keys? _)) (none? _)])
+
 (def no [or (nil? _) (false? _) (empty _)])
 (def t? [not (no _)])
 
