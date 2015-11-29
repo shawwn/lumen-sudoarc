@@ -154,6 +154,11 @@
        ,@ys
        ,g)))
 
+(mac if1 (x then . else)
+  `(if ,x ,then
+     (do ,@else)))
+(alias but if1)
+
 ; optional args.  For each (var val) in l, if var is nil, then
 ; do (set var val)
 (mac o l
