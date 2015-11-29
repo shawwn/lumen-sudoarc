@@ -1694,20 +1694,18 @@ setenv("repeat", {_stash: true, macro: function (n) {
   var g = unique("g");
   return(join(["for", g, n], l));
 }});
-setenv("push", {_stash: true, macro: function (_var, val) {
-  return(["add", _var, val]);
+setenv("push", {_stash: true, macro: function (lst, x) {
+  return(["ado", lst, ["add", "it", x], "it"]);
 }});
-setenv("pop", {_stash: true, macro: function (_var) {
-  var _x378 = ["target"];
-  _x378.lua = ["table.remove", _var];
-  _x378.js = [["get", _var, ["quote", "splice"]], -1, 1];
-  return(["call", ["fn", join(), ["let", "x", ["last", _var], _x378, "x"]]]);
+setenv("pop", {_stash: true, macro: function (lst) {
+  return(["ado", lst, ["last", "it"], ["drop", "it"]]);
 }});
-setenv("w/push", {_stash: true, macro: function (_var, val) {
+setenv("w/push", {_stash: true, macro: function (lst, x) {
   var _r66 = unstash(Array.prototype.slice.call(arguments, 2));
   var _id42 = _r66;
-  var body = cut(_id42, 0);
-  return(join(["do", ["push", _var, val]], body, [["pop", _var]]));
+  var l = cut(_id42, 0);
+  var g = unique("g");
+  return(["let", g, ["push", lst, x], join(["lastly", ["pop", g]], l)]);
 }});
 setenv("lfn", {_stash: true, macro: function (name, args, body) {
   var _r68 = unstash(Array.prototype.slice.call(arguments, 3));
@@ -1817,9 +1815,9 @@ kvs = function (x) {
         if (num63(_k)) {
           put(v);
         } else {
-          var _x447 = [_k, v];
-          _x447.key = true;
-          put(_x447);
+          var _x437 = [_k, v];
+          _x437.key = true;
+          put(_x437);
         }
       }
       return(_g);
@@ -1914,11 +1912,11 @@ keep = function (f, xs) {
   put = function (item) {
     return(add(_g2, item));
   };
-  var _x450 = xs;
-  var _n22 = _35(_x450);
+  var _x440 = xs;
+  var _n22 = _35(_x440);
   var _i22 = 0;
   while (_i22 < _n22) {
-    var x = _x450[_i22];
+    var x = _x440[_i22];
     if (f(x)) {
       put(x);
     }
@@ -2000,26 +1998,26 @@ pr = function () {
     write(lh);
   }
   if (sep) {
-    var _x453 = l;
-    var _n23 = _35(_x453);
+    var _x443 = l;
+    var _n23 = _35(_x443);
     var _i23 = 0;
     while (_i23 < _n23) {
-      var _x454 = _x453[_i23];
+      var _x444 = _x443[_i23];
       if (c) {
         write(c);
       } else {
         c = str(sep);
       }
-      write(str(_x454));
+      write(str(_x444));
       _i23 = _i23 + 1;
     }
   } else {
-    var _x455 = l;
-    var _n24 = _35(_x455);
+    var _x445 = l;
+    var _n24 = _35(_x445);
     var _i24 = 0;
     while (_i24 < _n24) {
-      var _x456 = _x455[_i24];
-      write(str(_x456));
+      var _x446 = _x445[_i24];
+      write(str(_x446));
       _i24 = _i24 + 1;
     }
   }
@@ -2096,8 +2094,8 @@ macex = compiler.expand;
 readstr = function (_) {
   return(read_all(stream(_)));
 };
-prnerr = function (_x470) {
-  var _id66 = _x470;
+prnerr = function (_x460) {
+  var _id66 = _x460;
   var expr = _id66[0];
   var msg = _id66[1];
   prn("Error in ", file, ": ");
@@ -2112,11 +2110,11 @@ loadstr = function (str) {
   var on_err = _id67["on-err"];
   var verbose = _id67.verbose;
   var print = _id67.print;
-  var _x471 = readstr(str);
-  var _n25 = _35(_x471);
+  var _x461 = readstr(str);
+  var _n25 = _35(_x461);
   var _i25 = 0;
   while (_i25 < _n25) {
-    var expr = _x471[_i25];
+    var expr = _x461[_i25];
     if ("1" === env("VERBOSE")) {
       prn(string(expr));
     }

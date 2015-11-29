@@ -1592,20 +1592,18 @@ setenv("repeat", {_stash = true, macro = function (n, ...)
   local g = unique("g")
   return(join({"for", g, n}, l))
 end})
-setenv("push", {_stash = true, macro = function (_var, val)
-  return({"add", _var, val})
+setenv("push", {_stash = true, macro = function (lst, x)
+  return({"ado", lst, {"add", "it", x}, "it"})
 end})
-setenv("pop", {_stash = true, macro = function (_var)
-  local _x409 = {"target"}
-  _x409.lua = {"table.remove", _var}
-  _x409.js = {{"get", _var, {"quote", "splice"}}, -1, 1}
-  return({"call", {"fn", join(), {"let", "x", {"last", _var}, _x409, "x"}}})
+setenv("pop", {_stash = true, macro = function (lst)
+  return({"ado", lst, {"last", "it"}, {"drop", "it"}})
 end})
-setenv("w/push", {_stash = true, macro = function (_var, val, ...)
+setenv("w/push", {_stash = true, macro = function (lst, x, ...)
   local _r66 = unstash({...})
   local _id42 = _r66
-  local body = cut(_id42, 0)
-  return(join({"do", {"push", _var, val}}, body, {{"pop", _var}}))
+  local l = cut(_id42, 0)
+  local g = unique("g")
+  return({"let", g, {"push", lst, x}, join({"lastly", {"pop", g}}, l)})
 end})
 setenv("lfn", {_stash = true, macro = function (name, args, body, ...)
   local _r68 = unstash({...})
@@ -1708,9 +1706,9 @@ function kvs(x)
         if num63(k) then
           put(v)
         else
-          local _x490 = {k, v}
-          _x490.key = true
-          put(_x490)
+          local _x480 = {k, v}
+          _x480.key = true
+          put(_x480)
         end
       end
       return(_g)
@@ -1791,11 +1789,11 @@ function keep(f, xs)
   put = function (item)
     return(add(_g2, item))
   end
-  local _x493 = xs
-  local _n22 = _35(_x493)
+  local _x483 = xs
+  local _n22 = _35(_x483)
   local _i22 = 0
   while _i22 < _n22 do
-    local x = _x493[_i22 + 1]
+    local x = _x483[_i22 + 1]
     if f(x) then
       put(x)
     end
@@ -1877,26 +1875,26 @@ function pr(...)
     write(lh)
   end
   if sep then
-    local _x501 = l
-    local _n23 = _35(_x501)
+    local _x491 = l
+    local _n23 = _35(_x491)
     local _i23 = 0
     while _i23 < _n23 do
-      local _x502 = _x501[_i23 + 1]
+      local _x492 = _x491[_i23 + 1]
       if c then
         write(c)
       else
         c = str(sep)
       end
-      write(str(_x502))
+      write(str(_x492))
       _i23 = _i23 + 1
     end
   else
-    local _x503 = l
-    local _n24 = _35(_x503)
+    local _x493 = l
+    local _n24 = _35(_x493)
     local _i24 = 0
     while _i24 < _n24 do
-      local _x504 = _x503[_i24 + 1]
-      write(str(_x504))
+      local _x494 = _x493[_i24 + 1]
+      write(str(_x494))
       _i24 = _i24 + 1
     end
   end
@@ -1973,8 +1971,8 @@ macex = compiler.expand
 readstr = function (_)
   return(read_all(stream(_)))
 end
-function prnerr(_x522)
-  local _id66 = _x522
+function prnerr(_x512)
+  local _id66 = _x512
   local expr = _id66[1]
   local msg = _id66[2]
   prn("Error in ", file, ": ")
@@ -1989,29 +1987,29 @@ function loadstr(str, ...)
   local on_err = _id67["on-err"]
   local verbose = _id67.verbose
   local print = _id67.print
-  local _x524 = readstr(str)
-  local _n25 = _35(_x524)
+  local _x514 = readstr(str)
+  local _n25 = _35(_x514)
   local _i25 = 0
   while _i25 < _n25 do
-    local expr = _x524[_i25 + 1]
+    local expr = _x514[_i25 + 1]
     if "1" == env("VERBOSE") then
       prn(string(expr))
     end
     if "1" == env("COMP") then
       prn(comp(expr))
     end
-    local _x525 = nil
+    local _x515 = nil
     local _msg = nil
     local _e3 = xpcall(function ()
-      _x525 = eval(expr)
-      return(_x525)
+      _x515 = eval(expr)
+      return(_x515)
     end, function (m)
       _msg = _37message_handler(m)
       return(_msg)
     end)
     local _e10
     if _e3 then
-      _e10 = _x525
+      _e10 = _x515
     else
       _e10 = _msg
     end

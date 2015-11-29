@@ -212,21 +212,17 @@
     `(for ,g ,n
       ,@l)))
 
-(mac push (var val)
-  `(add ,var ,val))
+(mac push (lst x)
+  `(ado ,lst (add it ,x) it))
 
-(mac pop (var)
-  `(call (fn () 
-    (let x (last ,var)
-      (target
-         lua: (table.remove ,var)
-         js: ((get ,var 'splice) -1 1))
-      x))))
+(mac pop (lst)
+  `(ado ,lst (last it) (drop it)))
 
-(mac w/push (var val . body)
-  `(do (push ,var ,val)
-       ,@body
-       (pop ,var)))
+(mac w/push (lst x . l)
+  (w/uniq g
+    `(let ,g (push ,lst ,x)
+       (lastly (pop ,g)
+          ,@l))))
 
 (mac lfn (name args body . l)
   `(let ,name nil
