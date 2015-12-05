@@ -862,7 +862,8 @@ setenv("guard", {_stash = true, macro = function (expr)
     local e = unique("e")
     local x = unique("x")
     local msg = unique("msg")
-    return({"let", {x, "nil", msg, "nil", e, {"xpcall", {"fn", join(), {"set", x, expr}}, {"fn", {"m"}, {"set", msg, {"%message-handler", "m"}}}}}, {"list", e, {"if", e, x, msg}}})
+    local trace = unique("trace")
+    return({"let", {x, "nil", msg, "nil", trace, "nil", e, {"xpcall", {"fn", join(), {"set", x, expr}}, {"fn", {"m"}, {"set", trace, {{"get", "debug", {"quote", "traceback"}}}}, {"set", msg, {"%message-handler", "m", trace}}}}}, {"list", e, {"if", e, x, msg}, {"if", e, "nil", trace}}})
   end
 end})
 setenv("each", {_stash = true, macro = function (x, t, ...)
@@ -973,11 +974,13 @@ local system = require("system")
 function eval_print(form)
   local _x = nil
   local _msg = nil
+  local _trace = nil
   local _e = xpcall(function ()
     _x = compiler.eval(form)
     return(_x)
   end, function (m)
-    _msg = _37message_handler(m)
+    _trace = debug.traceback()
+    _msg = _37message_handler(m, _trace)
     return(_msg)
   end)
   local _e1
@@ -986,11 +989,18 @@ function eval_print(form)
   else
     _e1 = _msg
   end
-  local _id = {_e, _e1}
+  local _e2
+  if _e then
+    _e2 = nil
+  else
+    _e2 = _trace
+  end
+  local _id = {_e, _e1, _e2}
   local ok = _id[1]
   local x = _id[2]
+  local trace = _id[3]
   if not ok then
-    return(print("error: " .. x))
+    return(print("error: " .. x .. "\n" .. trace))
   else
     if is63(x) then
       return(print(string(x)))
@@ -2000,11 +2010,13 @@ function loadstr(str, ...)
     end
     local _x515 = nil
     local _msg = nil
+    local _trace = nil
     local _e3 = xpcall(function ()
       _x515 = eval(expr)
       return(_x515)
     end, function (m)
-      _msg = _37message_handler(m)
+      _trace = debug.traceback()
+      _msg = _37message_handler(m, _trace)
       return(_msg)
     end)
     local _e10
@@ -2013,7 +2025,13 @@ function loadstr(str, ...)
     else
       _e10 = _msg
     end
-    local _id68 = {_e3, _e10}
+    local _e11
+    if _e3 then
+      _e11 = nil
+    else
+      _e11 = _trace
+    end
+    local _id68 = {_e3, _e10, _e11}
     local ok = _id68[1]
     local x = _id68[2]
     if ok and print == true then
@@ -2038,13 +2056,13 @@ end
 if luajit63() then
   ffi = require("ffi")
   setenv("defc", {_stash = true, macro = function (name, val)
-    local _e11
+    local _e12
     if id_literal63(val) then
-      _e11 = inner(val)
+      _e12 = inner(val)
     else
-      _e11 = val
+      _e12 = val
     end
-    return({"do", {{"get", "ffi", {"quote", "cdef"}}, {"quote", _e11}}, {"def", name, {"get", {"get", "ffi", {"quote", "C"}}, {"quote", name}}}})
+    return({"do", {{"get", "ffi", {"quote", "cdef"}}, {"quote", _e12}}, {"def", name, {"get", {"get", "ffi", {"quote", "C"}}, {"quote", name}}}})
   end})
   ffi.cdef("int usleep (unsigned int usecs)")
   usleep = ffi.C.usleep
