@@ -1,4 +1,4 @@
-(clone "sctb/lumen")
+(clone "sctb/lumen" "v0.2")
 
 
 ; By default, use LuaJIT when compiling Lumen.

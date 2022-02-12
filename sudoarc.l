@@ -236,8 +236,8 @@
      ,@l))
 
 (mac add (l x)
-  (target js: `(do ((get ,l 'push) ,x) nil)
-          lua: `((get table 'insert) ,l ,x)))
+  `(target js: (do ((get ,l 'push) ,x) nil)
+           lua: ((get table 'insert) ,l ,x)))
 
 
 (mac accum (name . body)
